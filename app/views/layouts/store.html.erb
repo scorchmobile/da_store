@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Language" content="en-us" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="robots" content="index, follow" />
+<meta name="robots" content="noodp, noydir">
+<meta name="rating" content="general" />
+<meta name="author" content="Nathan Stool" />
+<meta name="distribution" content="global" />
+<meta name="copyright" content="&copy; Deputize America" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="<%= @description if @description %>" />
+<meta name="keywords" content="<%= @keywords if @keywords %>"/>
+<link rel="canonical" href="<%= @canonical if @canonical %>" />
+<link rel="icon" type="image/ico" href="/favicon.ico" />
+<title><%= "#{@page_title} - #{Shoppe.settings.store_name}" %></title>
+<%= stylesheet_link_tag 'manifests/store', 'manifests/main' %>
+<%= javascript_include_tag 'manifests/store', 'manifests/main' %>
+<%= csrf_meta_tags %>
+<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+<%= yield :head %>
+</head>
+<body>
+
+
+<div class="demo">
+    <div class="container inner" style="padding-bottom: 6px;">
+        <ul class="links">
+            <li>
+                <%= link_to "<< Back to the Main Site", "#", class: 'call-to-action family' %>
+            </li>
+        </ul>
+
+        <p class="text">All Web Traffic is SSL Secured for Your Safetey.</p>
+    </div>
+</div>
+
+<div class="container">
+    <%= render partial: 'layouts/shared/nav', locals: { location: 'heade-nav' }  %>
+</div>
+<%= display_flash %>
+<%#= render partial: 'layouts/shared/flash' %>
+
+<!-- The main header displayed on all pages -->
+<!-- Sometimes will be shorted as the page content dictates. -->
+<header class="main <%= @full_header ? 'full' : 'basic' %>">
+    <div class="container inner">
+        <!-- Primary navigation -->
+        <nav class="main">
+            <ul>
+                <li>
+                    <%= link_to "Home", root_path, :nav_item => :home %>
+                </li>
+                <li>
+                    <%= link_to "Our Catalog", catalogue_path, :nav_item => :catalogue, :class => 'noborder' %>
+                    <ul>
+                        <% for category in Shoppe::ProductCategory.ordered %>
+                        <li>
+                            <%= link_to category.name, products_path(category.permalink) %>
+                        </li>
+                        <% end %>
+                    </ul>
+                </li>
+                <li>
+                    <%= link_to "About Our Products", page_path(:why), :nav_item => :why %>
+                </li>
+                <li>
+                    <%= link_to "FAQs", page_path(:faqs), :nav_item => :faqs %>
+                </li>
+                <li>
+                    <%= link_to "Get in Touch", page_path(:contact), :nav_item => :contact %>
+                </li>
+            </ul>
+
+
+        </nav>
+
+        <% if @full_header %>
+        <h2>Gear Up For the <em>Summer</em>.</h2>
+
+        <p class="intro">Check out our family and safety products on this page and then you can buy them through the website with just a few clicks.</p>
+        <% end %>
+
+    </div>
+
+    <% if @full_header %>
+    <div class="bar">
+        <div class="container inner">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="call">Call us today at <strong>+1 214-000-0000</strong> if you have any questions.</div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="offer"><strong>This week only!</strong> FREE next day shipping on all orders over $30.</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% end %>
+</header>
+
+<div class="spacer-2"></div>
+
+
+<!-- Main content section -->
+<section class="content">
+    <div class="container inner">
+        <div class="row">
+            <div class="col-sm-12 col-md-9">
+                <!-- Primary section -->
+                <section class="primary">
+                    <%= yield %>
+                </section>
+            </div>
+            <div class="col-md-3">
+                <!-- Sidebar -->
+                <section class="sidebar">
+                    <% if content_for?(:sidebar) %>
+                        <%= yield :sidebar %>
+                    <% else %>
+                        <%= render 'shared/basket' %>
+                        <%= render 'shared/reasons' %>
+                    <% end %>
+                </section>
+            </div>
+        </div>
+    </div>
+</section>
+
+<%= render partial: 'layouts/shared/footer' %>
+
+</body>
+</html>
